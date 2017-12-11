@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="meuModulo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Controle de Produtos</title>
+    <link rel="stylesheet" href="bower_components/materialize/materialize.min.css">
+      
+</head>
+<body ng-controller="indexController">
+    <header class="container">
+        <h2 ng-bind="titulo"></h2>
+    </header>
+    <main class="container">
+        <div class="row">
+            <input type="text" ng-model="busca" placeholder="Busca">
+            {{busca}}
+        </div>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Produtos</th>
+                    <th>Fornecedor</th>
+                    <th>Preco 1</th>
+                    <th>Preco 2</th>
+                    <th>Preco 3</th>
+                    <th>CustoMédio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="produto in produtos | filter:busca">
+                    <td>{{produto.Nome}}</td>
+                    <td>{{produto.Fornecedor}}</td>
+                    <td>{{produto.Preco1}}</td>
+                    <td>{{produto.Preco1}}</td>
+                    <td>{{produto.Preco3}}</td>
+                    <td>{{produto.media}}</td>
+                </tr>
+            </tbody>
+        </table>
+            <div class="row">
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" 
+                data-target="#myModal">Adicionar</button>
+            </div>
+ </main>
+
+
+
+<div id="myModal" class="modal bottom sheet row" role="dialog" style="margin-top: -430px" >
+    
+    <div class="modal-dialog row">
+
+        <div class="modal-content row">
+            <div class="modal-header">
+                <h5 class="modal-title">Adicionar produto</h5>
+            </div>
+            <div class="modal-body row">
+                <p>Preencha os dados do produto</p>
+                <div class="row">
+                    <div class="sr-only col m6">
+                        <label>Produto</label>
+                        <input type="text" ng-model="Produto.Nome" class="validate">                        
+                    </div>
+                    <div class="sr-only col m6">
+                        <label>Fornecedor</label>
+                        <input type="text" ng-model="Produto.Fornecedor" class="validate">                       
+                    </div>
+                    <div class="sr-only col m2">
+                        <label>Preco 1</label>
+                        <input type="text" ng-model="Produto.Preco1" class="validate">                        
+                    </div>
+                    <div class="sr-only col m2">
+                        <label>preco 2</label>
+                        <input type="text" ng-model="Produto.Preco2" class="validate">                       
+                    </div>
+                    <div class="sr-only col m2">
+                        <label>Preco 3</label>
+                        <input type="text" ng-model="Produto.Preco3" class="validate">                      
+                    </div>
+                                        
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="addProduto(Produto)" type="button" data-dismiss="modal" class=" btn btn-info btn-lg">Adicionar</button>
+                <button type="button" class="btn btn-default red" data-dismiss="modal">Cancelar</button>                
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+    
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/materialize/materialize.min.css"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/bootstrap/bootstrap.min.js"></script>
+
+   <script>
+   
+   angular.module("meuModulo", [])
+        .controller("indexController", function ($scope) {
+            $scope.titulo = "Controle - Estoque de produtos";
+            $scope.produtos = [
+                { Nome: "Arroz", Fornecedor: "PopArroz", Preco1: 25, Preco2: 28, Preco3: 32 },
+                { Nome: "Feijão", Fornecedor: "PopFeijao", Preco1: 33, Preco2: 30, Preco3: 31 },
+                { Nome: "Carne", Fornecedor: "PopCarne", Preco1: 65, Preco2: 64, Preco3: 59 },
+                { Nome: "Leite", Fornecedor: "PopLeite", Preco1: 37, Preco2: 34, Preco3: 39 },
+                { Nome: "Acúcar", Fornecedor: "PopAcucar", Preco1: 42, Preco2: 39, Preco3: 40 }
+            ];
+
+            var init = function () {
+                $scope.produtos.forEach(function (produto) {
+                    produto.media = media(produto);
+                });
+            };
+            var contar2 = 0;
+            var media = function (Produto) {
+                console.log(contar2++);
+                var media = (parseFloat(Produto.Preco1) + parseFloat(Produto.Preco2) + parseFloat(Produto.Preco3)) / 3;
+                return media.toFixed(2);
+            };
+            $scope.addProduto = function (Produto) {
+                Produto.media = media(Produto);
+                $scope.produtos.push(Produto);
+                $('#modal1').modal('close');
+                $scope.Produto = { Nome: "", Fornecedor: "", Preco1: '', Preco2: '', Preco3: '', media: '' };
+            };
+
+            init();
+
+        })
+   
+   </script>
+
+</body>
+</html>
